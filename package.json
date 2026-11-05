@@ -1,0 +1,48 @@
+{
+  "name": "stocki",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"wrangler dev --port 8787\" \"vite --port 5173\"",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.worker.json",
+    "lint": "eslint src --ext .ts,.tsx",
+    "test": "vitest run",
+    "e2e": "playwright test",
+    "db:reset": "wrangler d1 execute stocki-db --local --command=\"PRAGMA user_version=0\" && rm -f .wrangler/state/v3/d1/**/*.sqlite && wrangler d1 execute stocki-db --local --file=migrations/0000_init.sql",
+    "db:migrate": "wrangler d1 migrations apply stocki-db --local",
+    "db:migrate:remote": "wrangler d1 migrations apply stocki-db --remote",
+    "secrets:scan": "gitleaks detect --source . --no-git 2>/dev/null || gitleaks detect --source . 2>/dev/null || echo 'gitleaks not installed, skipping'",
+    "deploy": "npm run build && wrangler deploy && npm run db:migrate:remote"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.36.0",
+    "hono": "^4.6.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "xlsx": "^0.18.5",
+    "zod": "^3.23.8",
+    "zustand": "^5.0.0"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.5.0",
+    "@cloudflare/workers-types": "^4.20241022.0",
+    "@playwright/test": "^1.48.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@typescript-eslint/eslint-plugin": "^8.72.1",
+    "@typescript-eslint/parser": "^8.72.1",
+    "@vitejs/plugin-react": "^4.3.3",
+    "autoprefixer": "^10.4.20",
+    "concurrently": "^9.1.0",
+    "drizzle-kit": "^0.28.0",
+    "eslint": "^9.13.0",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10",
+    "vitest": "^2.1.4",
+    "wrangler": "^3.84.0"
+  }
+}

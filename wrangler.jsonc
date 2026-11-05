@@ -1,0 +1,34 @@
+{
+  "name": "stocki",
+  "main": "src/api/index.ts",
+  "compatibility_date": "2024-10-22",
+  "compatibility_flags": ["nodejs_compat"],
+
+  // Static assets served from the same Worker
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS"
+  },
+
+  // D1 database — keep database_id IN THIS FILE. Do not remove or move it.
+  // Wrangler only reads wrangler.jsonc / wrangler.json / wrangler.toml; it does NOT read
+  // .wrangler/wrangler.toml.local or any other "local" override file.
+  // Without database_id, `wrangler deploy` (Wrangler >= 4.45) may auto-provision a NEW,
+  // EMPTY D1 database, and `wrangler d1 ... --remote` cannot find the production DB.
+  // New environment only: run `wrangler d1 create stocki-db` and paste the returned id below.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "stocki-db",
+      "database_id": "fc9c7d24-6503-4de2-95da-3dd63e953455",
+      "migrations_dir": "migrations"
+    }
+  ],
+
+  // Secrets (set via: wrangler secret put ADMIN_EMAIL / APP_SECRET)
+  // Local dev: put them in .dev.vars (gitignored)
+  "vars": {},
+
+  "[env.preview]": {},
+  "[env.production]": {}
+}
